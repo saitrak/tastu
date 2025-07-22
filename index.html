@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Video Search</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #111; color: #fff; }
+    input[type="text"] { padding: 10px; width: 70%; }
+    button { padding: 10px 20px; }
+    .result { margin-top: 30px; background: #222; padding: 20px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Video Search</h1>
+  <input type="text" id="search" placeholder="Search..." />
+  <button onclick="doSearch()">Search</button>
+
+  <div id="result" class="result"></div>
+
+  <script>
+    function doSearch() {
+      const query = document.getElementById('search').value;
+      if (query) {
+        const slug = encodeURIComponent(query.toLowerCase().replace(/\s+/g, "-"));
+        history.pushState(null, '', `?q=${slug}`);
+        showResult(slug);
+      }
+    }
+
+    function showResult(slug) {
+      // Fake content generator
+      document.getElementById('result').innerHTML = `
+        <h2>Result for: ${slug.replace(/-/g, " ")}</h2>
+        <p>Here's a generated video for "<b>${slug}</b>".</p>
+        <video width="320" height="240" controls>
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      `;
+    }
+
+    // Load result if URL already has query
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('q');
+      if (slug) showResult(slug);
+    };
+  </script>
+</body>
+</html>
